@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const score = ref({ spelare: 3, dator: 0});
-const resultat = ref('Du vann din nååb')
+const score = ref({ spelare: 0, dator: 0 })
+const resultat = ref('Låt oss börja')
 
 function spelarval(e) {
   let buttons = document.getElementsByClassName('alternativ')
@@ -11,21 +11,55 @@ function spelarval(e) {
   }
   e.target.classList.add('spelarval')
   datorval()
+  hittaVinnare()
 }
-function datorval () {
-  let val =Math.floor(Math.random() * 3)
+function datorval() {
+  let val = Math.floor(Math.random() * 3)
   let alternativ = ['Sten', 'Sax', 'Påse']
   let buttons = document.getElementsByClassName('alternativ')
   for (let b of buttons) {
     b.classList.remove('datorval')
-    b.title=""
-    if(b.textContent == alternativ[val]) {
+    b.title = ''
+    if (b.textContent == alternativ[val]) {
       b.classList.add('datorval')
-      b.title="Datorns val"
+      b.title = 'Datorns val'
     }
   }
 }
-
+function hittaVinnare() {
+  let buttons = document.getElementsByClassName('alternativ')
+  for (let b of buttons) {
+    if (b.classList.contains('spelarval')) {
+      var spelarval = b.textContent
+    }
+    if (b.classList.contains('datorval')) {
+      var datorval = b.textContent
+    }
+  }
+  if (spelarval == datorval) {
+    resultat.value = 'Oavgjort'
+  } else if (
+    (spelarval == 'Sten' && datorval == 'Sax') ||
+    (spelarval == 'Sax' && datorval == 'Påse') ||
+    (spelarval == 'Påse' && datorval == 'Sten')
+  ) {
+    resultat.value = 'Du vann!!'
+    score.value.spelare++
+  } else {
+    resultat.value = 'Du förlorade!'
+    score.value.dator++
+  }
+}
+function reset() {
+  score.value.spelare = 0
+  score.value.dator = 0
+  let buttons = document.getElementsByClassName('alternativ')
+  for (let b of buttons) {
+    b.classList.remove('spelarval')
+    b.classList.remove('datorval')
+    resultat.value = 'Låt oss börja'
+  }
+}
 </script>
 
 <template>
@@ -40,13 +74,16 @@ function datorval () {
       <button class="alternativ" @click="spelarval">Påse</button>
     </div>
     <div class="resultat">
-      <p id="resultat">{{resultat}}</p>
+      <p id="resultat">{{ resultat }}</p>
     </div>
     <div class="score">
       <p>
-        <span id="spelare">{{ score.spelare }}</span> - 
+        <span id="spelare">{{ score.spelare }}</span> -
         <span id="dator">{{ score.dator }}</span>
       </p>
+    </div>
+    <div class="score">
+      <button id="nolla" @click="reset">Nollställ poäng</button>
     </div>
   </main>
 </template>
@@ -56,8 +93,13 @@ header {
   text-align: center;
   margin-bottom: 1.2em;
 }
+#nolla {
+  margin-top: 2em;
+  padding: 0.3em 0.6em;
+  font-size: 0.8em;
+}
 button {
-  padding: .6em 1.2em;
+  padding: 0.6em 1.2em;
   font-size: 1.2em;
   background-color: rgb(255, 255, 255);
   border: 1px solid #000000;
@@ -73,7 +115,7 @@ button.datorval {
 .knapprad {
   display: flex;
   justify-content: center;
-  gap: .6em;
+  gap: 0.6em;
 }
 .resultat {
   font-size: 1.2em;
