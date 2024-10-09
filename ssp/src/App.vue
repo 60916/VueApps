@@ -4,6 +4,7 @@ import KnappRad from './components/KnappRad.vue'
 
 const score = ref({ spelare: 0, dator: 0 })
 const resultat = ref('Låt oss börja')
+const knappar = ref(['Sten', 'Sax', 'Påse'])
 
 function hittaVinnare() {
   let buttons = document.getElementsByClassName('alternativ')
@@ -47,7 +48,7 @@ function reset() {
   </header>
 
   <main>
-    <KnappRad />
+    <KnappRad :knappar="knappar" @valda-knappar="hittaVinnare" />
     <div class="resultat">
       <p id="resultat">{{ resultat }}</p>
     </div>
