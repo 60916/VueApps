@@ -1,6 +1,7 @@
 <script setup>
-import { inject } from 'vue'
+document.title = 'About'
 
+import { inject } from 'vue'
 const views = inject('HomeViews')
 </script>
 
