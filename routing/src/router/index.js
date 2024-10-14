@@ -27,8 +27,13 @@ const router = createRouter({
       component: () => import('../views/NoShow.vue'),
       meta: {
         title: '404'
-      }
     }
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('../views/UsersView.vue')
+    },
   ]
 })
 

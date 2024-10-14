@@ -19,10 +19,10 @@ onMounted(() => {
     </p>
     <ul>
       <li>
-        <a href="/my">My view</a>
+        <RouterLink to="/my">My view</RouterLink>
       </li>
       <li>
-        <RouterLink to="/my">My view</RouterLink>
+        <RouterLink to="/users">Userview</RouterLink>
       </li>
     </ul>
   </main>
