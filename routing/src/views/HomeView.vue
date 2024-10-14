@@ -22,7 +22,7 @@ onMounted(() => {
         <RouterLink to="/my">My view</RouterLink>
       </li>
       <li>
-        <RouterLink to="/users">Userview</RouterLink>
+        <RouterLink to="/user">Userview</RouterLink>
       </li>
     </ul>
   </main>

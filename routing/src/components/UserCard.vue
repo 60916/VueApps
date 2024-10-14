@@ -1,15 +1,20 @@
 <script setup>
+import userData from "@/assets/data/users.json"
+import { ref } from "vue";
+
+const userList = ref(userData)
 const props = defineProps(['user'])
+
 </script>
 <template>
   <div class="card">
-    <img :src="user.image">
+    <img :src="props.user.image">
     <div>
         <p>
-          id: {{ user.id }}
+          id: {{ props.user.id }}
         </p>
         <p>
-          Name: {{ user.namn }}
+          Name: {{ props.user.namn }}
         </p>
     </div>
   </div>
