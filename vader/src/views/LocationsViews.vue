@@ -1,0 +1,87 @@
+<script setup>
+import { ref } from 'vue';
+
+const location = ref({ name: '', position: { lat: 0, long: 0}, default: false})
+
+const locationsList = ref([
+  {name: 'Mariehamn', position: { lat: 60.0, long: 20.0 }, default: false},
+  {name: 'Stockholm', position: { lat: 59.32, long: 18.32 }, default: true},
+  {name: 'London', position: { lat: 51.5, long: -0.1 }, default: false},
+  {name: 'Cape Town', position: { lat: -34.0, long: 18.5 }, default: false},
+])
+
+function addLocation() {
+  const newLocation = {
+    name: location.value.name, 
+    position: {
+      lat: location.value.position.lat,
+      long: location.value.position.long,
+    },
+    default: false
+  };
+
+  locationsList.value.push(newLocation)
+
+  location.value = { name: '', position: { lat: 0, long: 0,}, default: false}
+}
+function resetLocation () {
+  location.value = { name: '', position: { lat: 0, long: 0,}, default: false}
+}
+
+function removeLocation(index) {
+  locationsList.value.splice(index, 1);
+  
+}
+</script>
+<template>
+  <h2>Locations</h2>
+  <label>Namn: <input type="text" v-model="location.name" /></label>
+  <label>Lat: <input type="number" max="90" min="-90" step=".1" size="5" v-model="location.position.lat" /></label>
+  <label>Long: <input type="number" max="180" min="-180" step=".1" size="8" v-model="location.position.long" /></label>
+  <button @click="addLocation">Save</button> <button @click="resetLocation">Reset</button>
+  <hr>
+  <h3>List</h3>
+    <ul>
+        <li v-for="(loc, index) in locationsList" :key="loc" :class="loc.default ? 'default' : ''">
+          {{ loc.name }},
+          ( {{ Math.abs(loc.position.lat).toFixed(2) }}°{{ loc.position.lat > 0 ? 'N' : 'S' }}
+          {{ Math.abs(loc.position.long).toFixed(2) }}°{{ loc.position.long > 0 ? 'E' : 'W' }})
+          <span class="remove" @click="removeLocation(index)">x</span>
+        </li>
+    </ul>
+</template>
+
+<style scoped>
+label {
+  display: block;
+  width: 15em;
+  padding-top: .5em;
+}
+.remove {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-left: 10px; /* Skapar lite avstånd från texten */
+  color: white; /* Textfärg */
+  background-color: #ff4d4d; /* Röd bakgrundsfärg */
+  border: none; /* Ingen kantlinje */
+  border-radius: 5px; /* Rundade hörn */
+  cursor: pointer; /* Visar en hand när musen svävar över knappen */
+  transition: background-color 0.3s ease; /* Mjuk övergång för bakgrundsfärgen */
+}
+
+.remove:hover {
+  background-color: #ff1a1a; /* Mörkare röd vid hover */
+}
+
+.remove:active {
+  background-color: #cc0000; /* Ännu mörkare röd vid klick */
+}
+ul {
+  display: grid;
+  grid-template-columns:  auto;
+}
+li {
+  margin-top: 1em;
+  display: inline-block;
+}
+</style>

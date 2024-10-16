@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ForecastView from '../views/ForecastViews.vue'
+import LocationsViews from '@/views/LocationsViews.vue'
 //import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -10,14 +11,14 @@ const router = createRouter({
       name: 'home',
       component: ForecastView,
     },
-    /*{
-      path: '/about',
-      name: 'about',
+    {
+      path: '/locations',
+      name: 'Locations',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },*/
+      component: LocationsViews,
+    },
   ],
 })
 
