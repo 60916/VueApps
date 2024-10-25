@@ -1,5 +1,6 @@
 <script setup>
 import router from '@/router'
+import { getPosition } from '@/services/positioningService'
 import { onMounted, ref } from 'vue'
 
 const location = ref({
@@ -12,6 +13,34 @@ const locationsList = ref([])
 
 onMounted(() => {
   locationsList.value = JSON.parse(localStorage.getItem('locations'))
+  let current = locationsList.value.find(loc => {
+    return loc.name === 'Current location'
+  })
+  if (!current) {
+    current = {
+      name: 'Current location',
+      position: { lat: 0, long: 0 },
+      default: false,
+    }
+    locationsList.value.unshift(current)
+  }
+
+  getPosition()
+    .then(response => {
+      current.position = response.position
+      let index = locationsList.value.findIndex(loc => {
+        return loc.name === 'Current location'
+      })
+      locationsList.value.splice(index, 1, current)
+      localStorage.setItem('locations', JSON.stringify(locationsList.value))
+    })
+    .catch(err => {
+      let index = locationsList.value.findIndex(loc => {
+        return loc.name === 'Current location'
+      })
+      locationsList.value.splice(index, 1)
+      console.log(err)
+    })
 })
 
 function addLocation() {
@@ -93,7 +122,12 @@ function setDefaultLocation(index) {
       {{ Math.abs(loc.position.long).toFixed(2) }}°{{
         loc.position.long > 0 ? 'E' : 'W'
       }})
-      <span class="remove" @click.stop="removeLocation(index)">x</span>
+      <span
+        class="remove"
+        @click.stop="removeLocation(index)"
+        v-show="loc.name !== 'Current location'"
+        >x</span
+      >
     </li>
   </ul>
 </template>

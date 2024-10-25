@@ -2,7 +2,7 @@
 import wc from '@/assets/data/weatherCodes.json'
 import { ref } from 'vue'
 
-const props = defineProps(['forecast'])
+const props = defineProps(['current'])
 const weatherCodes = ref(wc)
 
 function getText(code) {
@@ -20,23 +20,30 @@ function getText(code) {
     <li>Temp</li>
     <li>Precip</li>
     <li>Wind</li>
+    <li>Humidity</li>
+    <li>Coverage</li>
+    <li>Pressure</li>
   </ul>
-  <ul v-for="day in props.forecast.weather" :key="day">
+  <ul v-for="day in props.current.weather" :key="day.date">
     <li>
-      {{ new Date(day.date).getDate() }}.{{ new Date(day.date).getMonth() + 1
-      }}<br />{{ getText(day.code) }}
-    </li>
-    <li>{{ day.temp.min }} - {{ day.temp.max }}{{ day.temp.unit }}</li>
-    <li>
-      {{ day.precipitation.sum }}{{ day.precipitation.unit }}<br />({{
-        day.precipitation.probability
-      }}%)
+      {{ new Date(day.date).getDate() }}.{{ new Date(day.date).getMonth() + 1 }}
+      <br />
+      {{ getText(day.code) }}
     </li>
     <li>
-      {{ Math.round(day.wind.speed) }} ({{ Math.round(day.wind.gusts) }}){{
-        day.wind.unit
-      }}<br />{{ day.wind.direction }}{{ day.wind.direction_unit }}
+      {{ day.temp.current_temp }} °C<br />
+      feels like {{ day.temp.app_temp }} °C
     </li>
+    <li>{{ day.precipitation }}mm<br /></li>
+    <li>
+      {{ Math.round(day.wind.speed) }} ({{
+        Math.round(day.wind.gusts)
+      }})m/s<br />
+      {{ day.wind.direction }}{{ day.wind.direction_unit }}
+    </li>
+    <li>{{ day.humidity }}%</li>
+    <li>{{ day.cloud }}%</li>
+    <li>{{ day.pressure }}hPa</li>
   </ul>
 </template>
 
@@ -44,7 +51,7 @@ function getText(code) {
 ul {
   padding: 0;
   display: grid;
-  grid-template-columns: 22% 22% 15% auto;
+  grid-template-columns: 10% 10% 10% 10% 10% 10% auto;
 }
 ul:nth-child(even) {
   background-color: aqua;

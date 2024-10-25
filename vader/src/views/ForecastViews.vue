@@ -2,13 +2,16 @@
 import { ref, watchEffect } from 'vue'
 import { getForecast } from '@/services/forecastService'
 import ForecastResult from '@/components/ForecastResult.vue'
+import { getCurrent } from '@/services/currentService'
+import CurrentResult from '@/components/CurrentResult.vue'
 
 const currentLocation = ref({
   lat: 60.0,
   long: 20.0,
   name: 'Nuvarande position',
 })
-const info = ref({})
+const forecast = ref({})
+const current = ref({})
 const props = defineProps(['location'])
 
 watchEffect(() => {
@@ -25,7 +28,14 @@ watchEffect(() => {
   if (currentLocation.value) {
     getForecast(currentLocation.value)
       .then(response => {
-        info.value = response
+        forecast.value = response
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    getCurrent(currentLocation.value)
+      .then(response => {
+        current.value = response
       })
       .catch(err => {
         console.log(err)
@@ -47,7 +57,10 @@ watchEffect(() => {
     <p class="location">
       Long: <span>{{ currentLocation.position.long.toFixed(3) }}</span>
     </p>
-    <ForecastResult :forecast="info" />
+    <h3>Idag:</h3>
+    <CurrentResult :current="current" />
+    <h3>Denna Vecka:</h3>
+    <ForecastResult :forecast="forecast" />
   </template>
 </template>
 <style scoped>
