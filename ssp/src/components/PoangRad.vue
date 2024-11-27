@@ -1,8 +1,38 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps(['vinnare', 'reset'])
 const score = ref({ spelare: 0, dator: 0 })
+
+const stats = ref({
+  vinster: 0, // Antal vinster för spelaren
+  förluster: 0, // Antal förluster för spelaren
+  oavgjorda: 0 // Antal oavgjorda matcher
+})
+
+// Beräkna det totala antalet matcher
+const totalMatches = computed(
+  () => stats.value.vinster + stats.value.förluster + stats.value.oavgjorda // Summera alla matcher
+)
+
+watch(
+  () => props.vinnare, // Observera 'vinnare' från props
+  (NyVinnare) => {
+    if (NyVinnare === 'spelare') {
+      stats.value.vinster++ // Öka spelarens vinster om spelaren vinner
+    } else if (NyVinnare === 'dator') {
+      stats.value.förluster++ // Öka spelarens förluster om datorn vinner
+    } else {
+      stats.value.oavgjorda++ // Öka antalet oavgjorda om det blir oavgjort
+    }
+  }
+)
+
+// Beräkna vinstprocenten
+const winPercentage = computed(() => {
+  // Om det finns matcher spelade, räkna ut vinstprocenten, annars 0
+  return totalMatches.value > 0 ? ((stats.value.vinster / totalMatches.value) * 100).toFixed(2) : 0
+})
 
 watch(props, () => {
   if (props.vinnare === 'spelare') {
@@ -33,6 +63,13 @@ watch(
         {{ score.dator }}
       </span>
     </p>
+  </div>
+  <div class="statistics">
+    <h3>Statistik</h3>
+    <p>Vinster: {{ stats.vinster }}</p>
+    <p>Förluster: {{ stats.förluster }}</p>
+    <p>Oavgjorda: {{ stats.oavgjorda }}</p>
+    <p>Vinstprocent: {{ winPercentage }}%</p>
   </div>
 </template>
 <style scoped></style>

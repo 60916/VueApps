@@ -1,9 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import BurgerMenu from './components/BurgerMenu.vue'
+import { ref } from 'vue'
+
+const menuActive = ref(false)
 </script>
 
 <template>
   <header>
+    <BurgerMenu @toggle-menu="menuActive = !menuActive" :active="menuActive" />
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
@@ -14,6 +19,4 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
