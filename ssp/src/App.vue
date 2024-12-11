@@ -37,6 +37,10 @@ function hittaVinnare(valdaKnappar) {
   let spelare = knappar.value.indexOf(valdaKnappar.spelare)
   let dator = knappar.value.indexOf(valdaKnappar.dator)
   resultat.value = { spelare: spelare, dator: dator }
+
+  if (spelare === dator) {
+    vinnare.value = 'oavgjort';
+  }
 }
 function raknaPoang(v) {
   vinnare.value = v

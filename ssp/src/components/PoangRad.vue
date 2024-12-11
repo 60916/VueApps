@@ -15,15 +15,25 @@ const totalMatches = computed(
   () => stats.value.vinster + stats.value.förluster + stats.value.oavgjorda // Summera alla matcher
 )
 
+const resetStats = () => {
+  stats.value.vinster = 0
+  stats.value.förluster = 0
+  stats.value.oavgjorda = 0
+  score.value.spelare = 0
+  score.value.dator = 0
+}
+
 watch(
   () => props.vinnare, // Observera 'vinnare' från props
   (NyVinnare) => {
     if (NyVinnare === 'spelare') {
-      stats.value.vinster++ // Öka spelarens vinster om spelaren vinner
+      stats.value.vinster++ // Öka spelarens vinster
+      score.value.spelare++ // Uppdatera poängen
     } else if (NyVinnare === 'dator') {
-      stats.value.förluster++ // Öka spelarens förluster om datorn vinner
-    } else {
-      stats.value.oavgjorda++ // Öka antalet oavgjorda om det blir oavgjort
+      stats.value.förluster++ // Öka spelarens förluster
+      score.value.dator++ // Uppdatera poängen
+    } else if (NyVinnare === 'oavgjort') {
+      stats.value.oavgjorda++ // Öka oavgjorda
     }
   }
 )
@@ -65,11 +75,12 @@ watch(
     </p>
   </div>
   <div class="statistics">
-    <h3>Statistik</h3>
-    <p>Vinster: {{ stats.vinster }}</p>
-    <p>Förluster: {{ stats.förluster }}</p>
-    <p>Oavgjorda: {{ stats.oavgjorda }}</p>
-    <p>Vinstprocent: {{ winPercentage }}%</p>
-  </div>
+  <h3>Statistik</h3>
+  <p>Vinster: {{ stats.vinster }}</p>
+  <p>Förluster: {{ stats.förluster }}</p>
+  <p>Oavgjorda: {{ stats.oavgjorda }}</p>
+  <p>Vinstprocent: {{ winPercentage }}%</p>
+  <button @click="resetStats">Återställ statistik</button>
+</div>
 </template>
 <style scoped></style>
